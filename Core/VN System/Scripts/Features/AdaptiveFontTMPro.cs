@@ -1,0 +1,42 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class AdaptiveFontTMPro : MonoBehaviour
+{
+    TextMeshProUGUI txt;
+    public bool continualUpdate = true;
+
+    public int fontSizeAtDefaultResolution = 24;
+    public static float defaultResolution = 2531f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+        txt = GetComponent<TextMeshProUGUI>();
+
+        if (continualUpdate)
+        {
+            InvokeRepeating("Adjust", 0f, Random.Range(0.3f, 1f));
+        }
+        else
+        {
+            Adjust();
+            enabled = false;
+        }
+    }
+
+    void Adjust()
+    {
+        if (!enabled || !gameObject.activeInHierarchy)
+            return;
+
+        float totalCurrentRes = Screen.height + Screen.width;
+        float perc = totalCurrentRes / defaultResolution;
+        int fontSize = Mathf.RoundToInt((float)fontSizeAtDefaultResolution * perc);
+
+        txt.fontSize = fontSize;
+    }
+}
